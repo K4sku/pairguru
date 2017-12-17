@@ -31,4 +31,7 @@ class User < ApplicationRecord
   has_many :comments
 
   validates :phone_number, format: { with: /\A[+]?\d+(?>[- .]\d+)*\z/, allow_nil: true }
+
+
+
 end
