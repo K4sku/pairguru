@@ -87,11 +87,15 @@ Rails.logger.info "Creating comments..."
 
 user_ids = User.pluck(:id)
 Movie.all.each do |mov|
-  rand(5..User.count).times do
+  rand_users = rand(5..User.count)
+  rand_users_ids = user_ids.take(rand_users)
+  i=0
+  rand_users.times do
     Comment.create!(
                body: Faker::Lorem.paragraph(3),
-               user_id: user_ids.sample,
+               user_id: rand_users_ids[i],
                movie_id: mov.id
     )
+    i += 1
   end
 end
