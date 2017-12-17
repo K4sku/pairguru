@@ -1,0 +1,40 @@
+- if user_signed_in?
+  - if @comment.body.nil?
+    = form_for @comment do |f|
+      .form-group
+        = f.text_area :body, class: 'form-control', rows:'3', placeholder: 'Tell us what you think of the movie!'
+        = f.hidden_field :movie_id, value: @movie.id
+      = f.submit class: 'btn btn-sm btn-default'
+  - else
+    = form_for @comment do |f|
+      .form-group
+        = f.label :body, 'Your comment'
+        %span.text-muted
+          posted
+          = time_ago_in_words(@comment.created_at)
+          ago
+
+        = f.text_area :body, class: 'form-control', rows:'3', disabled: true,
+        'data-toggle': 'tooltip', title: 'Users can leave only one comment per movie. Delete this one to post another.'
+        = f.hidden_field :movie_id, value: @movie.id
+        Users can leave only one comment per movie. Delete this one to post another.
+
+      = f.submit 'Post comment', class: 'btn btn-sm btn-default', disabled: true,
+      'data-toggle': 'tooltip', title: 'Users can leave only one comment per movie. Delete this one to post another.'
+      = link_to 'Delete', comment_path(@comment), method: :delete,
+                    data: {confirm: 'Are you sure you want to delete the comment?'},
+                    class: 'btn btn-sm btn-danger'
+
+%div{style: 'margin-top:2em;'}
+%h3 Comments:
+- @movie.comments.each do |comment|
+  - unless comment.user == current_user
+    .well
+      %p= comment.body
+      %p.text-muted
+        Author:
+        = comment.user.name
+        %br
+        Posted:
+        = time_ago_in_words(comment.created_at)
+        ago

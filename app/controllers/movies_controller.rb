@@ -7,17 +7,20 @@ class MoviesController < ApplicationController
 
   def show
     @movie = Movie.find(params[:id])
+    if user_signed_in?
+      @comment = Comment.find_or_initialize_by(movie_id: @movie.id, user_id: current_user.id)
+    end
   end
 
   def send_info
     @movie = Movie.find(params[:id])
     MovieInfoMailer.send_info(current_user, @movie).deliver_now
-    redirect_to :back, notice: "Email sent with movie info"
+    redirect_to :back, notice: 'Email sent with movie info'
   end
 
   def export
     file_path = "tmp/movies.csv"
     MovieExporter.new.call(current_user, file_path)
-    redirect_to root_path, notice: "Movies exported"
+    redirect_to root_path, notice: 'Movies exported'
   end
 end

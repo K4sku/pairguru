@@ -14,5 +14,10 @@ Rails.application.routes.draw do
     collection do
       get :export
     end
+    member do
+      get :comments
+    end
+  end
+  resources :comments, only: [:create, :destroy] do
   end
 end
