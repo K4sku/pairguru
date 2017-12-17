@@ -19,5 +19,8 @@ Rails.application.routes.draw do
     end
   end
   resources :comments, only: [:create, :destroy] do
+    collection do
+      get :most_active_users
+    end
   end
 end

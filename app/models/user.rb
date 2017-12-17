@@ -32,6 +32,6 @@ class User < ApplicationRecord
 
   validates :phone_number, format: { with: /\A[+]?\d+(?>[- .]\d+)*\z/, allow_nil: true }
 
-
+  scope :top_commenters_last_week, -> { select("users.*, COUNT(comments.id) as comments_count ").joins(:comments).group(:id).order("comments_count desc") }
 
 end
